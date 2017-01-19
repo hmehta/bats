@@ -69,7 +69,15 @@ setup() {
   true
 }
 
+setup_suite() {
+  true
+}
+
 teardown() {
+  true
+}
+
+teardown_suite() {
   true
 }
 
@@ -271,10 +279,12 @@ bats_perform_tests() {
   echo "1..$#"
   test_number=1
   status=0
+  setup_suite
   for test_name in "$@"; do
     "$0" $BATS_EXTENDED_SYNTAX "$BATS_TEST_FILENAME" "$test_name" "$test_number" || status=1
     let test_number+=1
   done
+  teardown_suite
   exit "$status"
 }
 
