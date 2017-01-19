@@ -15,6 +15,12 @@ if [ "$1" = "-x" ]; then
   shift
 fi
 
+BATS_FAILFAST=""
+if [ "$1" = "-f" ]; then
+  BATS_FAILFAST="$1"
+  shift
+fi
+
 BATS_TEST_FILENAME="$1"
 if [ -z "$BATS_TEST_FILENAME" ]; then
   echo "usage: bats-exec <filename>" >&2
@@ -282,6 +288,10 @@ bats_perform_tests() {
   setup_suite
   for test_name in "$@"; do
     "$0" $BATS_EXTENDED_SYNTAX "$BATS_TEST_FILENAME" "$test_name" "$test_number" || status=1
+    if [[ "$status" != "0" && "$BATS_FAILFAST" = "-f" ]]; then
+      teardown_suite
+      exit "$status"
+    fi
     let test_number+=1
   done
   teardown_suite

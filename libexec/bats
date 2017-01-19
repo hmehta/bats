@@ -17,6 +17,7 @@ help() {
   echo "  containing Bats test files."
   echo
   echo "  -c, --count    Count the number of test cases without running any tests"
+  echo "  -f, --failfast Abort running the suite on first test failure"
   echo "  -h, --help     Display this help message"
   echo "  -p, --pretty   Show results in pretty format (default for terminals)"
   echo "  -t, --tap      Show results in TAP format"
@@ -76,7 +77,7 @@ for arg in "$@"; do
   fi
 done
 
-unset count_flag pretty
+unset count_flag pretty failfast_flag
 [ -t 0 ] && [ -t 1 ] && pretty="1"
 [ -n "$CI" ] && pretty=""
 
@@ -92,6 +93,9 @@ for option in "${options[@]}"; do
     ;;
   "c" | "count" )
     count_flag="-c"
+    ;;
+  "f" | "failfast" )
+    failfast_flag="-f"
     ;;
   "t" | "tap" )
     pretty=""
@@ -139,4 +143,4 @@ else
 fi
 
 set -o pipefail execfail
-exec "$command" $count_flag $extended_syntax_flag "${filenames[@]}" | "$formatter"
+exec "$command" $count_flag $extended_syntax_flag $failfast_flag "${filenames[@]}" | "$formatter"
