@@ -39,7 +39,7 @@ begin() {
 
 pass() {
   go_to_column 0
-  printf " ✓ %s" "$name"
+  printf "[PASS] %s" "$name"
   advance
 }
 
@@ -47,14 +47,14 @@ skip() {
   local reason="$1"
   [ -z "$reason" ] || reason=": $reason"
   go_to_column 0
-  printf " - %s (skipped%s)" "$name" "$reason"
+  printf "[SKIP] %s (skipped%s)" "$name" "$reason"
   advance
 }
 
 fail() {
   go_to_column 0
   set_color 1 bold
-  printf " ✗ %s" "$name"
+  printf "[FAIL] %s" "$name"
   advance
 }
 
